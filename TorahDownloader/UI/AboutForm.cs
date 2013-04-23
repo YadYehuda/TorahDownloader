@@ -30,7 +30,7 @@ namespace TorahDownloader.UI
 				lvwPlugs.Items.Add(item);
 			}
 
-			using (Stream s = this.GetType().Assembly.GetManifestResourceStream("MyDownloader.App.UI.About.rtf"))
+			using (Stream s = this.GetType().Assembly.GetManifestResourceStream("TorahDownloader.UI.About.rtf"))
 			{
 				richTextBox1.LoadFile(s, RichTextBoxStreamType.RichText);
 			}
