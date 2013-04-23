@@ -33,7 +33,7 @@ namespace TorahDownloader.UI
 			if (!instance.Images.ContainsKey(ext))
 			{
 				//Icon iconForFile = IconExtractor.Extract(ext);
-				Icon iconForFile = IconReader.GetFileIconByExt(ext, IconReader.EnumIconSize.Small, false);
+				Icon iconForFile = IconProvider.Instance().GetFileIconByExt(ext, IconProvider.EnumIconSize.Small, false);
 
 				instance.Images.Add(ext, iconForFile);
 			}
@@ -58,9 +58,9 @@ namespace TorahDownloader.UI
 
 			if (!instance.Images.ContainsKey(key))
 			{
-				Icon iconForFile = IconReader.GetFolderIcon(
-					IconReader.EnumIconSize.Small,
-					(open ? IconReader.EnumFolderType.Open : IconReader.EnumFolderType.Closed));
+				Icon iconForFile = IconProvider.Instance().GetFolderIcon(
+					IconProvider.EnumIconSize.Small,
+					(open ? IconProvider.EnumFolderType.Open : IconProvider.EnumFolderType.Closed));
 
 				instance.Images.Add(key, iconForFile);
 			}

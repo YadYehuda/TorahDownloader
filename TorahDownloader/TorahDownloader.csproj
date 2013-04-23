@@ -79,6 +79,7 @@
     </Compile>
     <Compile Include="UI\FileTypeImageList.cs" />
     <Compile Include="UI\IconReader.cs" />
+    <Compile Include="UI\IconProvider.cs" />
     <Compile Include="UI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -98,6 +99,7 @@
     <Compile Include="UI\OptionsForm.Designer.cs">
       <DependentUpon>OptionsForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\StaticIcon.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -123,7 +125,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="UI\About.rtf" />
+    <EmbeddedResource Include="UI\About.rtf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -137,6 +139,12 @@
       <Project>{069abde0-a821-4509-9e99-6b5873745118}</Project>
       <Name>TorahDownloader.Extension</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\FileIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\FolderIcon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

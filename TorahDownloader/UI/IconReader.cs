@@ -3,7 +3,7 @@ using System.IO;
 
 namespace TorahDownloader.UI
 {
-	public class IconReader
+	public class IconReader : IconProvider
 	{
 		///
 		/// used to get/return information about a file
@@ -66,28 +66,6 @@ namespace TorahDownloader.UI
 		private const uint conFILE_ATTRIBUTE_NORMAL = 0x00000080;
 
 		///
-		/// size of the icon
-		///
-		public enum EnumIconSize
-		{
-			/// 32x32
-			Large = 0,
-			/// 16x16
-			Small = 1
-		}
-
-		///
-		/// state of the folder
-		///
-		public enum EnumFolderType
-		{
-			/// open folder
-			Open = 0,
-			/// closed folder
-			Closed = 1
-		}
-
-		///
 		/// hold file/icon information
 		/// see platformSDK SHFILEINFO
 		///
@@ -135,7 +113,7 @@ namespace TorahDownloader.UI
 		  uint uFlags
 		);
 
-		public static System.Drawing.Icon GetFileIcon(string filePath,
+		public override System.Drawing.Icon GetFileIcon(string filePath,
 			EnumIconSize size, bool addLinkOverlay)
 		{
 			EnumFileInfoFlags flags =
@@ -182,7 +160,7 @@ namespace TorahDownloader.UI
 		/// "size">large or small
 		/// "linkOverlay">true to include the overlay link iconlet
 		/// requested icon
-		public static System.Drawing.Icon GetFileIconByExt(
+		public override System.Drawing.Icon GetFileIconByExt(
 		  string fileExt,
 		  EnumIconSize size,
 		  bool addLinkOverlay)
@@ -213,7 +191,7 @@ namespace TorahDownloader.UI
 		/// "size">large or small
 		/// "folderType">open or closed
 		/// requested icon
-		public static System.Drawing.Icon GetFolderIcon(
+		public override System.Drawing.Icon GetFolderIcon(
 		  EnumIconSize size,
 		  EnumFolderType folderType)
 		{
@@ -227,7 +205,7 @@ namespace TorahDownloader.UI
 		/// "size">large or small
 		/// "folderType">open or closed
 		/// requested icon
-		public static System.Drawing.Icon GetFolderIcon(
+		public override System.Drawing.Icon GetFolderIcon(
 		  string folderPath,
 		  EnumIconSize size,
 		  EnumFolderType folderType)
