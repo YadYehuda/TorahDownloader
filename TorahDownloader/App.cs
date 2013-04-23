@@ -136,7 +136,7 @@ namespace TorahDownloader
 			try
 			{
 				// Attempt to create a tracker
-				tracker = new SingleInstanceTracker("SingleInstanceSample", new SingleInstanceEnforcerRetriever(GetSingleInstanceEnforcer));
+				tracker = new SingleInstanceTracker("TorahDownloader", new SingleInstanceEnforcerRetriever(GetSingleInstanceEnforcer));
 
 				// If this is the first instance of the application, run the main form
 				if (tracker.IsFirstInstance)
