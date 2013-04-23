@@ -260,5 +260,13 @@ namespace TorahDownloader.UI
 		{
 			speedLimit.Parameters.Enabled = enableSpeedLimitToolStripMenuItem.Checked;
 		}
+
+		private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			using (AboutForm about = new AboutForm())
+			{
+				about.ShowDialog();
+			}
+		}
 	}
 }
