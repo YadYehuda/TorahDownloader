@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{370414C8-1996-4A18-9B91-696D3BB76D6E}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TorahDownloader.Core</RootNamespace>
+    <AssemblyName>TorahDownloader.Core</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CalculatedSegment.cs" />
+    <Compile Include="Common\BoolFormatter.cs" />
+    <Compile Include="Common\ByteFormatter.cs" />
+    <Compile Include="Common\PathHelper.cs" />
+    <Compile Include="Common\TimeSpanFormatter.cs" />
+    <Compile Include="Concurrency\ObjectLocker.cs" />
+    <Compile Include="Concurrency\ReaderWriterObjectLocker.cs" />
+    <Compile Include="Downloader.cs" />
+    <Compile Include="DownloaderState.cs" />
+    <Compile Include="DownloadManager.cs" />
+    <Compile Include="EventArgs.cs" />
+    <Compile Include="Extensions\IExtension.cs" />
+    <Compile Include="Extensions\IExtensionParameters.cs" />
+    <Compile Include="Extensions\IInitializable.cs" />
+    <Compile Include="Extensions\IUIExtension.cs" />
+    <Compile Include="IMirrorSelector.cs" />
+    <Compile Include="IProtocolProvider.cs" />
+    <Compile Include="ISegmentCalculator.cs" />
+    <Compile Include="MinSizeSegmentCalculator.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="ProtocolProviderFactory.cs" />
+    <Compile Include="RemoteFileInfo.cs" />
+    <Compile Include="ResourceLocation.cs" />
+    <Compile Include="Segment.cs" />
+    <Compile Include="SegmentState.cs" />
+    <Compile Include="SequentialMirrorSelector.cs" />
+    <Compile Include="UI\AppManager.cs" />
+    <Compile Include="UI\Connection.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\Connection.Designer.cs">
+      <DependentUpon>Connection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\CoreExtension.cs" />
+    <Compile Include="UI\CoreUIExtension.cs" />
+    <Compile Include="UI\DownloadFolder.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\DownloadFolder.Designer.cs">
+      <DependentUpon>DownloadFolder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\IApp.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
