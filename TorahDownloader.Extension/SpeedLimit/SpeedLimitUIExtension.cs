@@ -1,5 +1,5 @@
-using TorahDownloader.Core.Extensions;
 using System.Windows.Forms;
+using TorahDownloader.Core.Extensions;
 using TorahDownloader.Extension.SpeedLimit.UI;
 
 namespace TorahDownloader.Extension.SpeedLimit

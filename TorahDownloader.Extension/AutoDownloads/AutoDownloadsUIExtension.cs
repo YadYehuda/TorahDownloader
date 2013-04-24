@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
-using TorahDownloader.Core.Extensions;
 using System.Windows.Forms;
+using TorahDownloader.Core.Extensions;
 using TorahDownloader.Extension.AutoDownloads.UI;
 
 namespace TorahDownloader.Extension.AutoDownloads

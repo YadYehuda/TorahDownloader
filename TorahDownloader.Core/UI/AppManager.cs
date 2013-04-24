@@ -1,6 +1,4 @@
-﻿using System;
-using System.Text;
-
+﻿
 namespace TorahDownloader.Core.UI
 {
 	public class AppManager

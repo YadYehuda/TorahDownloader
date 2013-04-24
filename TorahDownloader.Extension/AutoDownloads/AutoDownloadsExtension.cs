@@ -1,13 +1,11 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using TorahDownloader.Core.Extensions;
-using TorahDownloader.Core;
-using System.Threading;
-using TorahDownloader.Extension.SpeedLimit;
-using TorahDownloader.Core.UI;
-using System.Diagnostics;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Threading;
+using TorahDownloader.Core;
+using TorahDownloader.Core.Extensions;
+using TorahDownloader.Core.UI;
+using TorahDownloader.Extension.SpeedLimit;
 
 namespace TorahDownloader.Extension.AutoDownloads
 {

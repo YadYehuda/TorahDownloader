@@ -1,12 +1,9 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
-using TorahDownloader.Core.Extensions;
-using TorahDownloader.Core;
-using System.Threading;
-using System.Diagnostics;
-using Microsoft.Win32;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Threading;
+using TorahDownloader.Core;
+using TorahDownloader.Core.Extensions;
 
 namespace TorahDownloader.Extension.SpeedLimit
 {
