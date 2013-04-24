@@ -132,7 +132,7 @@ namespace TorahDownloader.UI
 		#region toolbar buttons
 		private void toolNewDownload_Click(object sender, EventArgs e)
 		{
-			downloadList1.NewFileDownload(null, true);
+			downloadList1.NewBatchDownload();
 		}
 
 		private void toolStart_Click(object sender, EventArgs e)
