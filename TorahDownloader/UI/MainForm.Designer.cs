@@ -306,11 +306,11 @@
             this.toolStripSeparator4,
             this.toolMoveSelectionsUp,
             this.toolMoveSelectionsDown});
-			this.toolStripMain.Location = new System.Drawing.Point(179, 0);
+			this.toolStripMain.Location = new System.Drawing.Point(182, 0);
 			this.toolStripMain.Name = "toolStripMain";
 			this.toolStripMain.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
 			this.toolStripMain.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-			this.toolStripMain.Size = new System.Drawing.Size(554, 25);
+			this.toolStripMain.Size = new System.Drawing.Size(585, 25);
 			this.toolStripMain.TabIndex = 2;
 			// 
 			// toolNewDownload
