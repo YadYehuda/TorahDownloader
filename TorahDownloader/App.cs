@@ -29,19 +29,18 @@ namespace TorahDownloader
 		{
 			AppManager.Instance.Initialize(this);
 
-			extensions = new List<IExtension>();
+			Extensions = new List<IExtension>();
 
-			extensions.Add(new CoreExtension());
+			Extensions.Add(new CoreExtension());
 
-			extensions.Add(new AutoDownloadsExtension());
-			extensions.Add(new SpeedLimitExtension());
+			Extensions.Add(new AutoDownloadsExtension());
+			Extensions.Add(new SpeedLimitExtension());
 		}
 
 		#endregion
 
 		#region Fields
 
-		private List<IExtension> extensions;
 		private SingleInstanceTracker tracker = null;
 		private bool disposed = false;
 
@@ -65,13 +64,7 @@ namespace TorahDownloader
 			}
 		}
 
-		public List<IExtension> Extensions
-		{
-			get
-			{
-				return extensions;
-			}
-		}
+		public List<IExtension> Extensions { get; private set; }
 
 		#endregion
 
@@ -79,11 +72,11 @@ namespace TorahDownloader
 
 		public IExtension GetExtensionByType(Type type)
 		{
-			for (int i = 0; i < this.extensions.Count; i++)
+			foreach (IExtension e in Extensions)
 			{
-				if (this.extensions[i].GetType() == type)
+				if (e.GetType() == type)
 				{
-					return this.extensions[i];
+					return e;
 				}
 			}
 
@@ -97,11 +90,11 @@ namespace TorahDownloader
 
 		public void InitExtensions()
 		{
-			for (int i = 0; i < Extensions.Count; i++)
+			foreach (IExtension e in Extensions)
 			{
-				if (Extensions[i] is IInitializable)
+				if (e is IInitializable)
 				{
-					((IInitializable)Extensions[i]).Init();
+					((IInitializable)e).Init();
 				}
 			}
 
@@ -111,13 +104,13 @@ namespace TorahDownloader
 			if (!disposed)
 			{
 				disposed = true;
-				for (int i = 0; i < Extensions.Count; i++)
+				foreach (IExtension e in Extensions)
 				{
-					if (Extensions[i] is IDisposable)
+					if (e is IDisposable)
 					{
 						try
 						{
-							((IDisposable)Extensions[i]).Dispose();
+							((IDisposable)e).Dispose();
 						}
 						catch (Exception ex)
 						{
