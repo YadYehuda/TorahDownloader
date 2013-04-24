@@ -42,7 +42,6 @@
 			this.columnResume = new System.Windows.Forms.ColumnHeader();
 			this.columnURL = new System.Windows.Forms.ColumnHeader();
 			this.popUpContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
-			this.newDownloadToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
 			this.startToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.pauseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -179,7 +178,6 @@
 			// popUpContextMenu
 			// 
 			this.popUpContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.newDownloadToolStripMenuItem,
 			this.toolStripSeparator5,
 			this.startToolStripMenuItem,
 			this.pauseToolStripMenuItem,
@@ -192,13 +190,6 @@
 			this.popUpContextMenu.Name = "contextMenuStrip1";
 			this.popUpContextMenu.Size = new System.Drawing.Size(194, 176);
 			this.popUpContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.popUpContextMenu_Opening);
-			// 
-			// newDownloadToolStripMenuItem
-			// 
-			this.newDownloadToolStripMenuItem.Name = "newDownloadToolStripMenuItem";
-			this.newDownloadToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
-			this.newDownloadToolStripMenuItem.Text = "New Download...";
-			this.newDownloadToolStripMenuItem.Click += new System.EventHandler(this.newDownloadToolStripMenuItem_Click);
 			// 
 			// toolStripSeparator5
 			// 
@@ -460,7 +451,6 @@
 		private System.Windows.Forms.ContextMenuStrip logContextMenu;
 		private System.Windows.Forms.ToolStripMenuItem clearLogToolStripMenuItem;
 		private System.Windows.Forms.ContextMenuStrip popUpContextMenu;
-		private System.Windows.Forms.ToolStripMenuItem newDownloadToolStripMenuItem;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
 		private System.Windows.Forms.ToolStripMenuItem startToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem pauseToolStripMenuItem;

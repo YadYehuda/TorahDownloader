@@ -33,9 +33,9 @@ namespace TorahDownloader.UI
 			DownloadManager.Instance.DownloadRemoved += new EventHandler<DownloaderEventArgs>(Instance_DownloadRemoved);
 			DownloadManager.Instance.DownloadEnded += new EventHandler<DownloaderEventArgs>(Instance_DownloadEnded);
 
-			for (int i = 0; i < DownloadManager.Instance.Downloads.Count; i++)
+			foreach (Downloader d in DownloadManager.Instance.Downloads)
 			{
-				AddDownload(DownloadManager.Instance.Downloads[i]);
+				AddDownload(d);
 			}
 
 			lvwDownloads.SmallImageList = FileTypeImageList.GetSharedInstance();
@@ -113,6 +113,7 @@ namespace TorahDownloader.UI
 		/// <remarks>This code is not currently used.  We only do bulk downloads by reading JSON-formatted files.</remarks>
 		/// <param name="url"></param>
 		/// <param name="modal"></param>
+		[Obsolete("Our Downloader currently does not allow single downloads", true)]
 		public void NewFileDownload(string url, bool modal)
 		{
 			throw new NotImplementedException();
@@ -762,11 +763,6 @@ namespace TorahDownloader.UI
 		private void clearLogToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			richLog.Clear();
-		}
-
-		private void newDownloadToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			NewFileDownload(null, true);
 		}
 
 		private void startToolStripMenuItem_Click(object sender, EventArgs e)
