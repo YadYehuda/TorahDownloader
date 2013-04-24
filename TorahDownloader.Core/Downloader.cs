@@ -495,7 +495,7 @@ namespace TorahDownloader.Core
 
 				do
 				{
-					newFileName = PathHelper.GetWithBackslash(fileInfo.DirectoryName)
+					newFileName = fileInfo.DirectoryName.GetWithDirectorySeparator()
 						+ fileExitWithoutExt + String.Format("({0})", count++) + ext;
 				}
 				while (File.Exists(newFileName));

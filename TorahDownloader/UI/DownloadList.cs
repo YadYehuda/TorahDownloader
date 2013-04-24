@@ -19,8 +19,8 @@ namespace TorahDownloader.UI
 	{
 		delegate void ActionDownloader(Downloader d, ListViewItem item);
 
-		Hashtable mapItemToDownload = new Hashtable();
-		Hashtable mapDownloadToItem = new Hashtable();
+		Dictionary<ListViewItem, Downloader> mapItemToDownload = new Dictionary<ListViewItem, Downloader>();
+		Dictionary<Downloader, ListViewItem> mapDownloadToItem = new Dictionary<Downloader, ListViewItem>();
 
 		ListViewItem lastSelection = null;
 		AutoDownloadsExtension scheduler;
@@ -59,8 +59,10 @@ namespace TorahDownloader.UI
 			this.BeginInvoke((MethodInvoker)lvwDownloads.BeginUpdate);
 		}
 
-		public void ImportFromTextFile()
+		public void ImportFromTLFile(string FilePath = null)
 		{
+			// TODO IMPORTANT!
+
 			//using (ImportFromFileForm importFile = new ImportFromFileForm())
 			//{
 			//	if (importFile.ShowDialog() == DialogResult.OK)
@@ -73,76 +75,6 @@ namespace TorahDownloader.UI
 
 			//		importFile.ApplySettings();
 			//	}
-			//}
-		}
-
-		public void NewBatchDownload()
-		{
-			//using (CreateBatchDownloadForm batchDownload = new CreateBatchDownloadForm())
-			//{
-			//	if (batchDownload.ShowDialog() == DialogResult.OK)
-			//	{
-			//		AddDownloadURLs(
-			//			batchDownload.URLs,
-			//			batchDownload.Segments,
-			//			batchDownload.DownloadPath,
-			//			0);
-
-			//		batchDownload.ApplySettings();
-			//	}
-			//}
-		}
-
-		public void NewDownloadFromData(string url)
-		{
-			//VideoDownloadExtension ext = (VideoDownloadExtension)App.Instance.GetExtensionByType(typeof(VideoDownloadExtension));
-			//
-			//if (ext.GetHandlerByURL(url) != null)
-			//{
-			//	((VideoDownloadUIExtension)ext.UIExtension).ShowNewVideoDialog(url, false);
-			//}
-			//else
-			//{
-			NewFileDownload(url, false);
-			//}
-		}
-
-		/// <summary>
-		/// Add a single file to be downloaded.
-		/// </summary>
-		/// <remarks>This code is not currently used.  We only do bulk downloads by reading JSON-formatted files.</remarks>
-		/// <param name="url"></param>
-		/// <param name="modal"></param>
-		[Obsolete("Our Downloader currently does not allow single downloads", true)]
-		public void NewFileDownload(string url, bool modal)
-		{
-			throw new NotImplementedException();
-			//if (modal)
-			//{
-			//	using (NewDownloadForm newDownload = new NewDownloadForm())
-			//	{
-			//		if (!String.IsNullOrEmpty(url))
-			//		{
-			//			newDownload.DownloadLocation = ResourceLocation.FromURL(url);
-			//		}
-
-			//		newDownload.ShowDialog();
-			//	}
-			//}
-			//else
-			//{
-			//	NewDownloadForm newDownload = new NewDownloadForm();
-
-			//	if (!String.IsNullOrEmpty(url))
-			//	{
-			//		newDownload.DownloadLocation = ResourceLocation.FromURL(url);
-			//	}
-
-			//	newDownload.ShowInTaskbar = true;
-			//	newDownload.MinimizeBox = true;
-			//	newDownload.Show();
-			//	newDownload.Focus();
-			//	newDownload.TopMost = true;
 			//}
 		}
 
@@ -248,22 +180,16 @@ namespace TorahDownloader.UI
 			}
 		}
 
-		public void AddDownloadURLs(
-			ResourceLocation[] args,
-			int segments,
-			string path,
-			int nrOfSubfolders)
+		public void AddDownloadURLs(ResourceLocation[] args, int segments, string path)
 		{
 			if (args == null) return;
 
 			if (path == null)
 			{
-				path = PathHelper.GetWithBackslash(Core.Properties.Settings.Default.DownloadFolder);
+				path = Core.Properties.Settings.Default.DownloadFolder;
 			}
-			else
-			{
-				path = PathHelper.GetWithBackslash(path);
-			}
+
+			path = path.GetWithDirectorySeparator();
 
 			try
 			{
@@ -276,12 +202,7 @@ namespace TorahDownloader.UI
 					string fileName = uri.Segments[uri.Segments.Length - 1];
 					fileName = HttpUtility.UrlDecode(fileName).Replace("/", "\\");
 
-					DownloadManager.Instance.Add(
-						rl,
-						null,
-						path + fileName,
-						segments,
-						false);
+					DownloadManager.Instance.Add(rl, null, path + fileName, segments, false);
 				}
 			}
 			finally
@@ -304,6 +225,9 @@ namespace TorahDownloader.UI
 			splitContainer2.Panel2Collapsed = !Settings.Default.ViewTransDetails;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public void UpdateUI()
 		{
 			bool isSelected = lvwDownloads.SelectedItems.Count > 0;
@@ -369,7 +293,7 @@ namespace TorahDownloader.UI
 					Downloader[] downloaders = new Downloader[lvwDownloads.SelectedItems.Count];
 					for (int i = 0; i < downloaders.Length; i++)
 					{
-						downloaders[i] = mapItemToDownload[lvwDownloads.SelectedItems[i]] as Downloader;
+						downloaders[i] = mapItemToDownload[lvwDownloads.SelectedItems[i]];
 					}
 					return downloaders;
 				}
@@ -382,27 +306,29 @@ namespace TorahDownloader.UI
 		{
 			this.BeginInvoke((MethodInvoker)delegate()
 			{
-				ListViewItem item = mapDownloadToItem[e.Downloader] as ListViewItem;
+				ListViewItem item = mapDownloadToItem[e.Downloader];
 
-				if (item != null)
+				if (item.Selected)
 				{
-					if (item.Selected)
-					{
-						lastSelection = null;
+					lastSelection = null;
 
-						lvwSegments.Items.Clear();
-						//lvwDownloads.SelectedItems.Clear();
-					}
-
-					mapDownloadToItem[e.Downloader] = null;
-					mapItemToDownload[item] = null;
-
-					item.Remove();
+					lvwSegments.Items.Clear();
+					//lvwDownloads.SelectedItems.Clear();
 				}
+
+				mapDownloadToItem.Remove(e.Downloader);
+				mapItemToDownload.Remove(item);
+
+				item.Remove();
 			}
 			);
 		}
 
+		/// <summary>
+		/// Event fired when a new Download is added.  This event calls the method that adds the Download to the GUI.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		void Instance_DownloadAdded(object sender, DownloaderEventArgs e)
 		{
 			if (IsHandleCreated)
@@ -415,6 +341,10 @@ namespace TorahDownloader.UI
 			}
 		}
 
+		/// <summary>
+		/// Add this Download to the ListView of downloads.
+		/// </summary>
+		/// <param name="d"></param>
 		private void AddDownload(Downloader d)
 		{
 			d.RestartingSegment += new EventHandler<SegmentEventArgs>(download_RestartingSegment);
@@ -456,19 +386,25 @@ namespace TorahDownloader.UI
 			lvwDownloads.Items.Add(item);
 		}
 
+		/// <summary>
+		/// Check whether a particular Download supports resuming the download (via Range headers) or not.
+		/// </summary>
+		/// <param name="d"></param>
+		/// <returns></returns>
 		private static string GetResumeStr(Downloader d)
 		{
 			return (d.RemoteFileInfo != null && d.RemoteFileInfo.AcceptRanges ? "Yes" : "No");
 		}
 
+		/// <summary>
+		/// Update the textual status of all Downloads in the ListView
+		/// </summary>
 		public void UpdateList()
 		{
-			for (int i = 0; i < lvwDownloads.Items.Count; i++)
+			foreach (ListViewItem item in lvwDownloads.Items)
 			{
-				ListViewItem item = lvwDownloads.Items[i];
 				if (item == null) return;
-				Downloader d = mapItemToDownload[item] as Downloader;
-				if (d == null) return;
+				Downloader d = mapItemToDownload[item];
 
 				DownloaderState state;
 
@@ -510,6 +446,13 @@ namespace TorahDownloader.UI
 			UpdateSegments();
 		}
 
+		/// <summary>
+		/// Update the list of segments being downloaded.
+		/// </summary>
+		/// <remarks>
+		/// Note that the segment status is only shown if <b>exactly one</b> download is selected.
+		/// It is not shown if multiple segments are selected.
+		/// </remarks>
 		private void UpdateSegments()
 		{
 			try
@@ -519,7 +462,7 @@ namespace TorahDownloader.UI
 				if (lvwDownloads.SelectedItems.Count == 1)
 				{
 					ListViewItem newSelection = lvwDownloads.SelectedItems[0];
-					Downloader d = mapItemToDownload[newSelection] as Downloader;
+					Downloader d = mapItemToDownload[newSelection];
 
 					if (lastSelection == newSelection)
 					{
@@ -553,6 +496,14 @@ namespace TorahDownloader.UI
 			}
 		}
 
+		/// <summary>
+		/// Execute a given action on the currently selected items in the ListView.
+		/// </summary>
+		/// <remarks>
+		/// Needs to remove the <code>ItemSelectionChanged</code> event handler because we don't want it to fire on
+		/// programmatically-executed events.
+		/// </remarks>
+		/// <param name="action"></param>
 		private void DownloadsAction(ActionDownloader action)
 		{
 			if (lvwDownloads.SelectedItems.Count > 0)
@@ -566,7 +517,7 @@ namespace TorahDownloader.UI
 					for (int i = lvwDownloads.SelectedItems.Count - 1; i >= 0; i--)
 					{
 						ListViewItem item = lvwDownloads.SelectedItems[i];
-						action((Downloader)mapItemToDownload[item], item);
+						action(mapItemToDownload[item], item);
 					}
 
 					lvwDownloads.ItemSelectionChanged += new ListViewItemSelectionChangedEventHandler(lvwDownloads_ItemSelectionChanged);

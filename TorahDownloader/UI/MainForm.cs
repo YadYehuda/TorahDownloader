@@ -1,6 +1,7 @@
 ﻿using MetroFramework.Forms;
 using System;
 using System.ComponentModel;
+using System.IO;
 using System.Windows.Forms;
 using TorahDownloader.Core;
 using TorahDownloader.Extension.SpeedLimit;
@@ -75,13 +76,9 @@ namespace TorahDownloader.UI
 		{
 			string[] args = (string[])e.Message;
 
-			if (args.Length == 2 && args[0] == "/sw")
+			if (args.Length == 1 && File.Exists(args[0]))
 			{
-				this.BeginInvoke((MethodInvoker) delegate { downloadList1.NewDownloadFromData(args[1]); });
-			}
-			else
-			{
-				//downloadList1.AddDownloadURLs(ResourceLocation.FromURLArray(args), 1, null, 0);
+				this.BeginInvoke((MethodInvoker) delegate { downloadList1.ImportFromTLFile(args[0]); });
 			}
 		}
 
@@ -132,7 +129,7 @@ namespace TorahDownloader.UI
 		#region toolbar buttons
 		private void toolNewDownload_Click(object sender, EventArgs e)
 		{
-			downloadList1.NewBatchDownload();
+			downloadList1.ImportFromTLFile();
 		}
 
 		private void toolStart_Click(object sender, EventArgs e)
@@ -183,7 +180,7 @@ namespace TorahDownloader.UI
 
 		private void newBatchDownloadToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			downloadList1.NewBatchDownload();
+			downloadList1.ImportFromTLFile();
 		}
 
 		private void viewMenuClickClick(object sender, EventArgs e)

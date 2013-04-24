@@ -30,7 +30,7 @@ namespace TorahDownloader.Core.UI
 
 		public string Folder
 		{
-			get { return PathHelper.GetWithBackslash(txtSaveTo.Text); }
+			get { return txtSaveTo.Text.GetWithDirectorySeparator(); }
 		}
 
 		private void btnSelAV_Click(object sender, EventArgs e)
