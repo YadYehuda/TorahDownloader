@@ -258,7 +258,7 @@ namespace TorahDownloader.UI
 
 		private void cntxMenuDownLimit_Opening(object sender, CancelEventArgs e)
 		{
-			speedLimit.Parameters.Enabled = enableSpeedLimitToolStripMenuItem.Checked;
+			enableSpeedLimitToolStripMenuItem.Checked = speedLimit.Parameters.Enabled;
 		}
 
 		private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
