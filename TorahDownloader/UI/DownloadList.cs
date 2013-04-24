@@ -107,8 +107,15 @@ namespace TorahDownloader.UI
 			//}
 		}
 
+		/// <summary>
+		/// Add a single file to be downloaded.
+		/// </summary>
+		/// <remarks>This code is not currently used.  We only do bulk downloads by reading JSON-formatted files.</remarks>
+		/// <param name="url"></param>
+		/// <param name="modal"></param>
 		public void NewFileDownload(string url, bool modal)
 		{
+			throw new NotImplementedException();
 			//if (modal)
 			//{
 			//	using (NewDownloadForm newDownload = new NewDownloadForm())
