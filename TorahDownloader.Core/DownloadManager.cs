@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using TorahDownloader.Core.Concurrency;
 
 namespace TorahDownloader.Core
@@ -24,7 +25,6 @@ namespace TorahDownloader.Core
 		#region Fields
 
 		private List<Downloader> downloads = new List<Downloader>();
-		private int addBatchCount;
 		private ReaderWriterObjectLocker downloadListSync = new ReaderWriterObjectLocker();
 
 		#endregion
@@ -53,30 +53,16 @@ namespace TorahDownloader.Core
 		{
 			get
 			{
-				double total = 0;
-
 				using (LockDownloadList(false))
 				{
-					for (int i = 0; i < this.Downloads.Count; i++)
-					{
-						if (this.Downloads[i].State == DownloaderState.Working)
-						{
-							total += this.Downloads[i].Rate;
-						}
-					}
+					return this.downloads.Aggregate(0d, (total, d) => {
+						return (d.State == DownloaderState.Working) ? total + d.Rate : total;
+					});
 				}
-
-				return total;
 			}
 		}
 
-		public int AddBatchCount
-		{
-			get
-			{
-				return addBatchCount;
-			}
-		}
+		public int AddBatchCount { get; private set; }
 
 		#endregion
 
@@ -189,7 +175,7 @@ namespace TorahDownloader.Core
 
 		public virtual void OnBeginAddBatchDownloads()
 		{
-			addBatchCount++;
+			AddBatchCount++;
 
 			if (BeginAddBatchDownloads != null)
 			{
@@ -199,7 +185,7 @@ namespace TorahDownloader.Core
 
 		public virtual void OnEndAddBatchDownloads()
 		{
-			addBatchCount--;
+			AddBatchCount--;
 
 			if (EndAddBatchDownloads != null)
 			{
