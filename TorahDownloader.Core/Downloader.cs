@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using TorahDownloader.Core.Common;
 using TorahDownloader.Core.Concurrency;
@@ -12,38 +13,25 @@ namespace TorahDownloader.Core
 	public class Downloader
 	{
 		private string localFile;
-		private int requestedSegmentCount;
-		private ResourceLocation resourceLocation;
-		private List<ResourceLocation> mirrors;
-		private List<Segment> segments;
 		private Thread mainThread;
 		private List<Thread> threads;
-		private RemoteFileInfo remoteFileInfo;
-		private DownloaderState state;
-		private DateTime createdDateTime;
-		private Exception lastError;
 		private Dictionary<string, object> extentedProperties = new Dictionary<string, object>();
 
 		private IProtocolProvider defaultDownloadProvider;
 		private ISegmentCalculator segmentCalculator;
 		private IMirrorSelector mirrorSelector;
 
-		private string statusMessage;
-
-		private Downloader(
-			ResourceLocation rl,
-			ResourceLocation[] mirrors,
-			string localFile)
+		private Downloader(ResourceLocation rl, ResourceLocation[] mirrors, string localFile)
 		{
 			this.threads = new List<Thread>();
-			this.resourceLocation = rl;
+			this.ResourceLocation = rl;
 			if (mirrors == null)
 			{
-				this.mirrors = new List<ResourceLocation>();
+				this.Mirrors = new List<ResourceLocation>();
 			}
 			else
 			{
-				this.mirrors = new List<ResourceLocation>(mirrors);
+				this.Mirrors = new List<ResourceLocation>(mirrors);
 			}
 			this.localFile = localFile;
 
@@ -55,28 +43,17 @@ namespace TorahDownloader.Core
 			this.MirrorSelector = new SequentialMirrorSelector();
 		}
 
-		public Downloader(
-			ResourceLocation rl,
-			ResourceLocation[] mirrors,
-			string localFile,
-			int segmentCount) :
+		public Downloader(ResourceLocation rl, ResourceLocation[] mirrors, string localFile, int segmentCount) :
 			this(rl, mirrors, localFile)
 		{
 			SetState(DownloaderState.NeedToPrepare);
 
-			this.createdDateTime = DateTime.Now;
-			this.requestedSegmentCount = segmentCount;
-			this.segments = new List<Segment>();
+			this.CreatedDateTime = DateTime.Now;
+			this.RequestedSegments = segmentCount;
+			this.Segments = new List<Segment>();
 		}
 
-		public Downloader(
-			ResourceLocation rl,
-			ResourceLocation[] mirrors,
-			string localFile,
-			List<Segment> segments,
-			RemoteFileInfo remoteInfo,
-			int requestedSegmentCount,
-			DateTime createdDateTime) :
+		public Downloader(ResourceLocation rl, ResourceLocation[] mirrors, string localFile, List<Segment> segments, RemoteFileInfo remoteInfo, int requestedSegmentCount, DateTime createdDateTime) :
 			this(rl, mirrors, localFile)
 		{
 			if (segments.Count > 0)
@@ -88,10 +65,10 @@ namespace TorahDownloader.Core
 				SetState(DownloaderState.NeedToPrepare);
 			}
 
-			this.createdDateTime = createdDateTime;
-			this.remoteFileInfo = remoteInfo;
-			this.requestedSegmentCount = requestedSegmentCount;
-			this.segments = segments;
+			this.CreatedDateTime = createdDateTime;
+			this.RemoteFileInfo = remoteInfo;
+			this.RequestedSegments = requestedSegmentCount;
+			this.Segments = segments;
 		}
 
 		#region Properties
@@ -117,49 +94,25 @@ namespace TorahDownloader.Core
 			get { return extentedProperties; }
 		}
 
-		public ResourceLocation ResourceLocation
-		{
-			get
-			{
-				return this.resourceLocation;
-			}
-		}
+		public ResourceLocation ResourceLocation { get; private set; }
 
-		public List<ResourceLocation> Mirrors
-		{
-			get
-			{
-				return this.mirrors;
-			}
-		}
+		public List<ResourceLocation> Mirrors { get; private set; }
 
 		public long FileSize
 		{
-			get
+			get 
 			{
-				if (remoteFileInfo == null)
+				if (RemoteFileInfo == null)
 				{
 					return 0;
 				}
-				return remoteFileInfo.FileSize;
+				return RemoteFileInfo.FileSize;
 			}
 		}
 
-		public DateTime CreatedDateTime
-		{
-			get
-			{
-				return createdDateTime;
-			}
-		}
+		public DateTime CreatedDateTime { get; private set; }
 
-		public int RequestedSegments
-		{
-			get
-			{
-				return requestedSegmentCount;
-			}
-		}
+		public int RequestedSegments { get; private set; }
 
 		public string LocalFile
 		{
@@ -173,23 +126,12 @@ namespace TorahDownloader.Core
 		{
 			get
 			{
-				int count = segments.Count;
+				int count = Segments.Count;
 
-				if (count > 0)
-				{
-					double progress = 0;
+				if (count == 0) return 0;
 
-					for (int i = 0; i < count; i++)
-					{
-						progress += segments[i].Progress;
-					}
-
-					return progress / count;
-				}
-				else
-				{
-					return 0;
-				}
+				double progress = Segments.Sum(seg => seg.Progress);
+				return progress / count;
 			}
 		}
 
@@ -197,14 +139,7 @@ namespace TorahDownloader.Core
 		{
 			get
 			{
-				double rate = 0;
-
-				for (int i = 0; i < segments.Count; i++)
-				{
-					rate += segments[i].Rate;
-				}
-
-				return rate;
+				return Segments.Sum(seg => seg.Rate);
 			}
 		}
 
@@ -212,14 +147,7 @@ namespace TorahDownloader.Core
 		{
 			get
 			{
-				long transfered = 0;
-
-				for (int i = 0; i < segments.Count; i++)
-				{
-					transfered += segments[i].Transfered;
-				}
-
-				return transfered;
+				return Segments.Sum(seg => seg.Transfered);
 			}
 		}
 
@@ -227,40 +155,20 @@ namespace TorahDownloader.Core
 		{
 			get
 			{
-				if (this.Rate == 0)
-				{
-					return TimeSpan.MaxValue;
-				}
+				double rate = this.Rate;
 
-				double missingTransfer = 0;
+				if (rate == 0) return TimeSpan.MaxValue;
 
-				for (int i = 0; i < segments.Count; i++)
-				{
-					missingTransfer += segments[i].MissingTransfer;
-				}
-
-				return TimeSpan.FromSeconds(missingTransfer / this.Rate);
+				double missingTransfer = Segments.Sum(seg => seg.MissingTransfer);
+				return TimeSpan.FromSeconds(missingTransfer / rate);
 			}
 		}
 
-		public List<Segment> Segments
-		{
-			get
-			{
-				return segments;
-			}
-		}
+		public List<Segment> Segments { get; private set; }
 
-		public Exception LastError
-		{
-			get { return lastError; }
-			set { lastError = value; }
-		}
+		public Exception LastError { get; set; }
 
-		public DownloaderState State
-		{
-			get { return state; }
-		}
+		public DownloaderState State { get; private set; }
 
 		public bool IsWorking()
 		{
@@ -270,16 +178,9 @@ namespace TorahDownloader.Core
 				state == DownloaderState.Working);
 		}
 
-		public RemoteFileInfo RemoteFileInfo
-		{
-			get { return remoteFileInfo; }
-		}
+		public RemoteFileInfo RemoteFileInfo { get; private set; }
 
-		public string StatusMessage
-		{
-			get { return statusMessage; }
-			set { statusMessage = value; }
-		}
+		public string StatusMessage { get; set; }
 
 		public ISegmentCalculator SegmentCalculator
 		{
@@ -314,7 +215,7 @@ namespace TorahDownloader.Core
 
 		private void SetState(DownloaderState value)
 		{
-			state = value;
+			State = value;
 
 			OnStateChanged();
 		}
@@ -322,7 +223,7 @@ namespace TorahDownloader.Core
 		private void StartToPrepare()
 		{
 			mainThread = new Thread(new ParameterizedThreadStart(StartDownloadThreadProc));
-			mainThread.Start(requestedSegmentCount);
+			mainThread.Start(RequestedSegments);
 		}
 
 		private void StartPrepared()
@@ -397,7 +298,7 @@ namespace TorahDownloader.Core
 
 		public IDisposable LockSegments()
 		{
-			return new ObjectLocker(this.segments);
+			return new ObjectLocker(this.Segments);
 		}
 
 		public void WaitForConclusion()
@@ -420,7 +321,7 @@ namespace TorahDownloader.Core
 
 		public void Pause()
 		{
-			if (state == DownloaderState.Preparing || state == DownloaderState.WaitingForReconnect)
+			if (State == DownloaderState.Preparing || State == DownloaderState.WaitingForReconnect)
 			{
 				Segments.Clear();
 
@@ -430,7 +331,7 @@ namespace TorahDownloader.Core
 				return;
 			}
 
-			if (state == DownloaderState.Working)
+			if (State == DownloaderState.Working)
 			{
 				SetState(DownloaderState.Pausing);
 
@@ -457,17 +358,17 @@ namespace TorahDownloader.Core
 
 		public void Start()
 		{
-			if (state == DownloaderState.NeedToPrepare)
+			if (State == DownloaderState.NeedToPrepare)
 			{
 				SetState(DownloaderState.Preparing);
 
 				StartToPrepare();
 			}
 			else if (
-				state != DownloaderState.Preparing &&
-				state != DownloaderState.Pausing &&
-				state != DownloaderState.Working &&
-				state != DownloaderState.WaitingForReconnect)
+				State != DownloaderState.Preparing &&
+				State != DownloaderState.Pausing &&
+				State != DownloaderState.Working &&
+				State != DownloaderState.WaitingForReconnect)
 			{
 				SetState(DownloaderState.Preparing);
 
@@ -519,9 +420,9 @@ namespace TorahDownloader.Core
 
 			do
 			{
-				lastError = null;
+				LastError = null;
 
-				if (state == DownloaderState.Pausing)
+				if (State == DownloaderState.Pausing)
 				{
 					SetState(DownloaderState.NeedToPrepare);
 					return;
@@ -532,7 +433,7 @@ namespace TorahDownloader.Core
 				currentTry++;
 				try
 				{
-					remoteFileInfo = defaultDownloadProvider.GetFileInfo(this.ResourceLocation, out inputStream);
+					RemoteFileInfo = defaultDownloadProvider.GetFileInfo(this.ResourceLocation, out inputStream);
 					break;
 				}
 				catch (ThreadAbortException)
@@ -542,7 +443,7 @@ namespace TorahDownloader.Core
 				}
 				catch (Exception ex)
 				{
-					lastError = ex;
+					LastError = ex;
 					if (currentTry < Settings.Default.MaxRetries)
 					{
 						SetState(DownloaderState.WaitingForReconnect);
@@ -559,7 +460,7 @@ namespace TorahDownloader.Core
 
 			try
 			{
-				lastError = null;
+				LastError = null;
 				StartSegments(segmentCount, inputStream);
 			}
 			catch (ThreadAbortException)
@@ -568,7 +469,7 @@ namespace TorahDownloader.Core
 			}
 			catch (Exception ex)
 			{
-				lastError = ex;
+				LastError = ex;
 				SetState(DownloaderState.EndedWithError);
 			}
 		}
@@ -585,17 +486,17 @@ namespace TorahDownloader.Core
 
 			CalculatedSegment[] calculatedSegments;
 
-			if (!remoteFileInfo.AcceptRanges)
+			if (!RemoteFileInfo.AcceptRanges)
 			{
-				calculatedSegments = new CalculatedSegment[] { new CalculatedSegment(0, remoteFileInfo.FileSize) };
+				calculatedSegments = new CalculatedSegment[] { new CalculatedSegment(0, RemoteFileInfo.FileSize) };
 			}
 			else
 			{
-				calculatedSegments = this.SegmentCalculator.GetSegments(segmentCount, remoteFileInfo);
+				calculatedSegments = this.SegmentCalculator.GetSegments(segmentCount, RemoteFileInfo);
 			}
 
 			lock (threads) threads.Clear();
-			lock (segments) segments.Clear();
+			lock (Segments) Segments.Clear();
 
 			for (int i = 0; i < calculatedSegments.Length; i++)
 			{
@@ -610,7 +511,7 @@ namespace TorahDownloader.Core
 				segment.StartPosition = calculatedSegments[i].StartPosition;
 				segment.EndPosition = calculatedSegments[i].EndPosition;
 
-				segments.Add(segment);
+				Segments.Add(segment);
 			}
 
 			RunSegments();
@@ -626,7 +527,7 @@ namespace TorahDownloader.Core
 			{
 				do
 				{
-					lastError = null;
+					LastError = null;
 
 					SetState(DownloaderState.Preparing);
 
@@ -639,7 +540,7 @@ namespace TorahDownloader.Core
 					}
 					catch (Exception ex)
 					{
-						lastError = ex;
+						LastError = ex;
 						if (currentTry < Settings.Default.MaxRetries)
 						{
 							SetState(DownloaderState.WaitingForReconnect);
@@ -665,7 +566,7 @@ namespace TorahDownloader.Core
 					newInfo.LastModified > RemoteFileInfo.LastModified ||
 					newInfo.FileSize != RemoteFileInfo.FileSize)
 				{
-					this.remoteFileInfo = newInfo;
+					this.RemoteFileInfo = newInfo;
 					StartSegments(this.RequestedSegments, stream);
 				}
 				else
@@ -684,7 +585,7 @@ namespace TorahDownloader.Core
 			}
 			catch (Exception ex)
 			{
-				lastError = ex;
+				LastError = ex;
 				SetState(DownloaderState.EndedWithError);
 			}
 		}
@@ -843,17 +744,17 @@ namespace TorahDownloader.Core
 						if (tempStream != null) tempStream.Dispose();
 
 						// check if the file on mirror is the same
-						if (tempRemoteInfo.FileSize == remoteFileInfo.FileSize &&
-							tempRemoteInfo.AcceptRanges == remoteFileInfo.AcceptRanges)
+						if (tempRemoteInfo.FileSize == RemoteFileInfo.FileSize &&
+							tempRemoteInfo.AcceptRanges == RemoteFileInfo.AcceptRanges)
 						{
 							// if yes, stop looking for the mirror
 							break;
 						}
 
-						lock (mirrors)
+						lock (Mirrors)
 						{
 							// the file on the mirror is not the same, so remove from the mirror list
-							mirrors.Remove(location);
+							Mirrors.Remove(location);
 						}
 
 						// the file on the mirror is different
@@ -871,7 +772,7 @@ namespace TorahDownloader.Core
 				else
 				{
 					//  change the segment URL to the main URL
-					segment.CurrentURL = this.resourceLocation.URL;
+					segment.CurrentURL = this.ResourceLocation.URL;
 				}
 
 				using (segment.InputStream)
@@ -922,7 +823,7 @@ namespace TorahDownloader.Core
 						}
 
 						// check if the user have requested to pause the download
-						if (state == DownloaderState.Pausing)
+						if (State == DownloaderState.Pausing)
 						{
 							segment.State = SegmentState.Paused;
 							break;
@@ -965,11 +866,11 @@ namespace TorahDownloader.Core
 
 		private void AddNewSegmentIfNeeded()
 		{
-			lock (segments)
+			lock (Segments)
 			{
-				for (int i = 0; i < this.segments.Count; i++)
+				for (int i = 0; i < Segments.Count; i++)
 				{
-					Segment oldSegment = this.segments[i];
+					Segment oldSegment = Segments[i];
 					if (oldSegment.State == SegmentState.Downloading &&
 						oldSegment.Left.TotalSeconds > Settings.Default.MinSegmentLeftToStartNewSegment &&
 						oldSegment.MissingTransfer / 2 >= Settings.Default.MinSegmentSize)
@@ -979,7 +880,7 @@ namespace TorahDownloader.Core
 
 						// create a new segment allocation the half old segment
 						Segment newSegment = new Segment();
-						newSegment.Index = this.segments.Count;
+						newSegment.Index = Segments.Count;
 						newSegment.StartPosition = oldSegment.StartPosition + newSize;
 						newSegment.InitialStartPosition = newSegment.StartPosition;
 						newSegment.EndPosition = oldSegment.EndPosition;
@@ -989,7 +890,7 @@ namespace TorahDownloader.Core
 						oldSegment.EndPosition = oldSegment.EndPosition - newSize;
 
 						// add the new segment to the list
-						segments.Add(newSegment);
+						Segments.Add(newSegment);
 
 						StartSegment(newSegment);
 
