@@ -8,6 +8,8 @@ namespace TorahDownloader.Core
 {
 	public class DownloadManager
 	{
+		public const int DEFAULT_NUM_SEGMENTS = 1;
+
 		#region Singleton
 
 		private static DownloadManager instance = new DownloadManager();
