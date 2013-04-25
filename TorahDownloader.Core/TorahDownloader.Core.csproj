@@ -77,6 +77,12 @@
     <Compile Include="UI\Connection.Designer.cs">
       <DependentUpon>Connection.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\FileChooser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\FileChooser.Designer.cs">
+      <DependentUpon>FileChooser.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\CoreExtension.cs" />
     <Compile Include="UI\CoreUIExtension.cs" />
     <Compile Include="UI\DownloadFolder.cs">
@@ -96,6 +102,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="UI\FileChooser.resx">
+      <DependentUpon>FileChooser.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\DownloadFolder.resx">
       <DependentUpon>DownloadFolder.cs</DependentUpon>
     </EmbeddedResource>
