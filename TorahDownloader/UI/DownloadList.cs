@@ -61,21 +61,15 @@ namespace TorahDownloader.UI
 
 		public void ImportFromTLFile(string FilePath = null)
 		{
-			// TODO IMPORTANT!
+			using (ImportFromTLFileForm importForm = new ImportFromTLFileForm())
+			{
+				if (importForm.ShowDialog() == DialogResult.OK)
+				{
+					AddDownloadURLs(importForm.URLs, DownloadManager.DEFAULT_NUM_SEGMENTS, importForm.DownloadPath);
 
-			//using (ImportFromFileForm importFile = new ImportFromFileForm())
-			//{
-			//	if (importFile.ShowDialog() == DialogResult.OK)
-			//	{
-			//		AddDownloadURLs(
-			//			importFile.URLs,
-			//			1,
-			//			importFile.DownloadPath,
-			//			0);
-
-			//		importFile.ApplySettings();
-			//	}
-			//}
+					importForm.ApplySettings();
+				}
+			}
 		}
 
 		public void StartScheduler(bool enabled)
