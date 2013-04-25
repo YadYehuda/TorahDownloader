@@ -56,11 +56,11 @@
 			this.txtSaveTo.CustomForeColor = false;
 			this.txtSaveTo.FontSize = MetroFramework.MetroTextBoxSize.Small;
 			this.txtSaveTo.FontWeight = MetroFramework.MetroTextBoxWeight.Regular;
-			this.txtSaveTo.Location = new System.Drawing.Point(3, 22);
+			this.txtSaveTo.Location = new System.Drawing.Point(0, 21);
 			this.txtSaveTo.Multiline = false;
 			this.txtSaveTo.Name = "txtSaveTo";
 			this.txtSaveTo.SelectedText = "";
-			this.txtSaveTo.Size = new System.Drawing.Size(321, 20);
+			this.txtSaveTo.Size = new System.Drawing.Size(324, 23);
 			this.txtSaveTo.Style = MetroFramework.MetroColorStyle.Blue;
 			this.txtSaveTo.StyleManager = null;
 			this.txtSaveTo.TabIndex = 1;
@@ -76,7 +76,7 @@
 			this.lblText.FontSize = MetroFramework.MetroLabelSize.Medium;
 			this.lblText.FontWeight = MetroFramework.MetroLabelWeight.Light;
 			this.lblText.LabelMode = MetroFramework.Controls.MetroLabelMode.Default;
-			this.lblText.Location = new System.Drawing.Point(3, 0);
+			this.lblText.Location = new System.Drawing.Point(0, 0);
 			this.lblText.Name = "lblText";
 			this.lblText.Size = new System.Drawing.Size(155, 19);
 			this.lblText.Style = MetroFramework.MetroColorStyle.Blue;
