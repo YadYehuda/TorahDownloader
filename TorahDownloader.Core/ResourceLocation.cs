@@ -81,10 +81,7 @@ namespace TorahDownloader.Core
 				}
 				return requestedFileName;
 			}
-			set
-			{
-				requestedFileName = value;
-			}
+			set { requestedFileName = value; }
 		}
 
 		public bool Authenticate { get; set; }
@@ -157,6 +154,10 @@ namespace TorahDownloader.Core
 
 		public override string ToString()
 		{
+			if (requestedFileName != null)
+			{
+				return requestedFileName + " - " + URL;
+			}
 			return this.URL;
 		}
 
