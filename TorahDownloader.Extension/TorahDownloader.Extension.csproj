@@ -66,6 +66,24 @@
       <DependentUpon>TimeGrid.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Protocols\BaseProtocolProvider.cs" />
+    <Compile Include="Protocols\FtpProtocolProvider.cs" />
+    <Compile Include="Protocols\HttpFtpProtocolExtension.cs" />
+    <Compile Include="Protocols\HttpFtpProtocolParametersSettingsProxy.cs" />
+    <Compile Include="Protocols\HttpFtpProtocolUIExtension.cs" />
+    <Compile Include="Protocols\HttpProtocolProvider.cs" />
+    <Compile Include="Protocols\IHttpFtpProtocolParameters.cs" />
+    <Compile Include="Protocols\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Protocols\UI\Proxy.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Protocols\UI\Proxy.Designer.cs">
+      <DependentUpon>Proxy.cs</DependentUpon>
+    </Compile>
     <Compile Include="SpeedLimit\ISpeedLimitParameters.cs" />
     <Compile Include="SpeedLimit\LimitedRateStreamProxy.cs" />
     <Compile Include="SpeedLimit\ProtocolProviderProxy.cs" />
@@ -95,6 +113,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="AutoDownloads\Settings.settings" />
+    <None Include="Protocols\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="SpeedLimit\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings1.Designer.cs</LastGenOutput>
@@ -115,6 +137,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AutoDownloads\UI\TimeGrid.resx">
       <DependentUpon>TimeGrid.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Protocols\UI\Proxy.resx">
+      <DependentUpon>Proxy.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SpeedLimit\UI\LimitCfg.resx">
       <DependentUpon>LimitCfg.cs</DependentUpon>
