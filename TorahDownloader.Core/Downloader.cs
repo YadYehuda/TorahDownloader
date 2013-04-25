@@ -232,6 +232,7 @@ namespace TorahDownloader.Core
 			mainThread.Start();
 		}
 
+		#region EventListener Callers
 		protected virtual void OnRestartingSegment(Segment segment)
 		{
 			if (RestartingSegment != null)
@@ -295,6 +296,7 @@ namespace TorahDownloader.Core
 				InfoReceived(this, EventArgs.Empty);
 			}
 		}
+		#endregion
 
 		public IDisposable LockSegments()
 		{
@@ -327,6 +329,7 @@ namespace TorahDownloader.Core
 
 				mainThread.Abort();
 				mainThread = null;
+				// Reset to the default unstarted state
 				SetState(DownloaderState.NeedToPrepare);
 				return;
 			}
@@ -356,23 +359,35 @@ namespace TorahDownloader.Core
 			}
 		}
 
+		/// <summary>
+		/// Start/Resume this downloader.
+		/// </summary>
+		/// <remarks>
+		/// The download will only be started if it is currently in a startable state.
+		/// If it is currently running, in the process of starting, in the process of pausing, or waiting to
+		/// reconnect, it will not be restarted.  Note that the case statements in this function are
+		/// written in a way that matches this description.
+		///  * "NeedToPrepare" obviously needs to be started.
+		///  * "Preparing", "Pausing", "Working", and "WaitingForReconnect" are all states that should be ignored.
+		///  * All other states should be started/resumed.
+		/// </remarks>
 		public void Start()
 		{
-			if (State == DownloaderState.NeedToPrepare)
+			switch (State)
 			{
-				SetState(DownloaderState.Preparing);
-
-				StartToPrepare();
-			}
-			else if (
-				State != DownloaderState.Preparing &&
-				State != DownloaderState.Pausing &&
-				State != DownloaderState.Working &&
-				State != DownloaderState.WaitingForReconnect)
-			{
-				SetState(DownloaderState.Preparing);
-
-				StartPrepared();
+				case DownloaderState.NeedToPrepare:
+					SetState(DownloaderState.Preparing);
+					StartToPrepare();
+					break;
+				case DownloaderState.Preparing:
+				case DownloaderState.Pausing:
+				case DownloaderState.Working:
+				case DownloaderState.WaitingForReconnect:
+					break;
+				default:
+					SetState(DownloaderState.Preparing);
+					StartToPrepare();
+					break;
 			}
 		}
 
@@ -599,10 +614,10 @@ namespace TorahDownloader.Core
 
 			using (FileStream fs = new FileStream(this.LocalFile, FileMode.Open, FileAccess.Write))
 			{
-				for (int i = 0; i < this.Segments.Count; i++)
+				foreach (Segment s in this.Segments)
 				{
-					Segments[i].OutputStream = fs;
-					StartSegment(Segments[i]);
+					s.OutputStream = fs;
+					StartSegment(s);
 				}
 
 				do
@@ -613,9 +628,9 @@ namespace TorahDownloader.Core
 				while (RestartFailedSegments());
 			}
 
-			for (int i = 0; i < this.Segments.Count; i++)
+			foreach (Segment s in this.Segments)
 			{
-				if (Segments[i].State == SegmentState.Error)
+				if (s.State == SegmentState.Error)
 				{
 					SetState(DownloaderState.EndedWithError);
 					return;
