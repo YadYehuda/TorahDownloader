@@ -86,12 +86,6 @@
     <Compile Include="UI\MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\NewDownloadForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UI\NewDownloadForm.Designer.cs">
-      <DependentUpon>NewDownloadForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="UI\NoBorderToolStripRenderer.cs" />
     <Compile Include="UI\OptionsForm.cs">
       <SubType>Form</SubType>
@@ -111,9 +105,6 @@
     </Compile>
     <EmbeddedResource Include="UI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UI\NewDownloadForm.resx">
-      <DependentUpon>NewDownloadForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
