@@ -80,6 +80,12 @@
     <Compile Include="UI\FileTypeImageList.cs" />
     <Compile Include="UI\IconReader.cs" />
     <Compile Include="UI\IconProvider.cs" />
+    <Compile Include="UI\ImportFromTLFileForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ImportFromTLFileForm.Designer.cs">
+      <DependentUpon>ImportFromTLFileForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -103,6 +109,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UI\ImportFromTLFileForm.resx">
+      <DependentUpon>ImportFromTLFileForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
