@@ -171,6 +171,7 @@ namespace TorahDownloader.Core
 			}
 		}
 
+		#region EventHandler Callers
 		public virtual void OnBeginAddBatchDownloads()
 		{
 			AddBatchCount++;
@@ -214,6 +215,7 @@ namespace TorahDownloader.Core
 				DownloadRemoved(this, new DownloaderEventArgs(d));
 			}
 		}
+		#endregion
 
 		public void SwapDownloads(int idx, bool isThreadSafe)
 		{
