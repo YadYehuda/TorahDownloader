@@ -35,6 +35,9 @@
     <Reference Include="MetroFramework">
       <HintPath>..\packages\ModernUI.1.1.0.1\lib\net45\MetroFramework.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.5.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Remoting" />
@@ -86,6 +89,12 @@
     <Compile Include="UI\ImportFromTLFileForm.Designer.cs">
       <DependentUpon>ImportFromTLFileForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\ImportFromTLFilePreviewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ImportFromTLFilePreviewForm.Designer.cs">
+      <DependentUpon>ImportFromTLFilePreviewForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -111,6 +120,9 @@
     </Compile>
     <EmbeddedResource Include="UI\ImportFromTLFileForm.resx">
       <DependentUpon>ImportFromTLFileForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\ImportFromTLFilePreviewForm.resx">
+      <DependentUpon>ImportFromTLFilePreviewForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UI\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

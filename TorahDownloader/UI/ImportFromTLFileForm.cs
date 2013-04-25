@@ -1,4 +1,5 @@
 ﻿using MetroFramework.Forms;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
@@ -16,10 +17,7 @@ namespace TorahDownloader.UI
 
 		public string DownloadPath
 		{
-			get
-			{
-				return downloadFolder1.Folder;
-			}
+			get { return downloadFolder1.Folder; }
 		}
 
 		public ResourceLocation[] URLs
@@ -28,7 +26,20 @@ namespace TorahDownloader.UI
 			{
 				List<ResourceLocation> urls = new List<ResourceLocation>();
 
-				// TODO: FILL THE LIST HERE!!!!
+				if (IsValid())
+				{
+					// TODO: FILL THE LIST HERE!!!!
+					JsonTextReader jtr = new JsonTextReader(File.OpenText(fileChooser1.FileName));
+					var data = (new JsonSerializer()).Deserialize<dynamic>(jtr);
+
+					foreach (var item in data.files)
+					{
+						urls.Add(new ResourceLocation() {
+							URL = item.location,
+							FileName = item.filename
+						});
+					}
+				}
 
 				return urls.ToArray();
 			}
@@ -67,9 +78,13 @@ namespace TorahDownloader.UI
 
 		private void btnPreview_Click(object sender, System.EventArgs e)
 		{
-			
+			if (IsValid())
+			{
+				using (ImportFromTLFilePreviewForm preview = new ImportFromTLFilePreviewForm(this.URLs))
+				{
+					preview.ShowDialog();
+				}
+			}
 		}
-
-
 	}
 }

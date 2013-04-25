@@ -79,7 +79,7 @@
 			// fileChooser1
 			// 
 			this.fileChooser1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.fileChooser1.Color = MetroFramework.MetroColorStyle.Blue;
 			this.fileChooser1.CustomBackground = false;
 			this.fileChooser1.DefaultExt = "tdl";
@@ -96,7 +96,7 @@
 			// scheduledDownloadEnabler1
 			// 
 			this.scheduledDownloadEnabler1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.scheduledDownloadEnabler1.Location = new System.Drawing.Point(23, 177);
 			this.scheduledDownloadEnabler1.Name = "scheduledDownloadEnabler1";
 			this.scheduledDownloadEnabler1.Size = new System.Drawing.Size(454, 163);
@@ -105,7 +105,7 @@
 			// downloadFolder1
 			// 
 			this.downloadFolder1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+			| System.Windows.Forms.AnchorStyles.Right)));
 			this.downloadFolder1.Color = MetroFramework.MetroColorStyle.Blue;
 			this.downloadFolder1.CustomBackground = false;
 			this.downloadFolder1.LabelText = "Save downloaded files in:";

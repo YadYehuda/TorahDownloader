@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Generic;
 
 namespace TorahDownloader.Core
 {
 	public static class ProtocolProviderFactory
 	{
-		private static Hashtable protocolHandlers = new Hashtable();
+		private static Dictionary<string, Type> protocolHandlers = new Dictionary<string, Type>();
 
 		public static event EventHandler<ResolvingProtocolProviderEventArgs> ResolvingProtocolProvider;
 
@@ -38,7 +38,7 @@ namespace TorahDownloader.Core
 			if (index > 0)
 			{
 				string prefix = uri.Substring(0, index);
-				Type type = protocolHandlers[prefix] as Type;
+				Type type = protocolHandlers[prefix];
 				return type;
 			}
 			else
