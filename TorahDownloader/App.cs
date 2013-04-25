@@ -7,6 +7,7 @@ using TorahDownloader.Core.UI;
 using TorahDownloader.SingleInstancing;
 using TorahDownloader.Extension.AutoDownloads;
 using TorahDownloader.Extension.SpeedLimit;
+using TorahDownloader.Extension.Protocols;
 
 namespace TorahDownloader
 {
@@ -35,6 +36,7 @@ namespace TorahDownloader
 
 			Extensions.Add(new AutoDownloadsExtension());
 			Extensions.Add(new SpeedLimitExtension());
+			Extensions.Add(new HttpFtpProtocolExtension());
 		}
 
 		#endregion
