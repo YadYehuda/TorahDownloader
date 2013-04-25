@@ -55,9 +55,7 @@ namespace TorahDownloader.Core
 			{
 				using (LockDownloadList(false))
 				{
-					return this.downloads.Aggregate(0d, (total, d) => {
-						return (d.State == DownloaderState.Working) ? total + d.Rate : total;
-					});
+					return this.downloads.Sum(d => ((d.State == DownloaderState.Working) ? d.Rate : 0));
 				}
 			}
 		}
