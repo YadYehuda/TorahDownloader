@@ -1,11 +1,12 @@
-﻿using System;
+﻿using MetroFramework.Controls;
+using System;
 using System.Windows.Forms;
 using TorahDownloader.Core.Common;
 using TorahDownloader.Core.Properties;
 
 namespace TorahDownloader.Core.UI
 {
-	public partial class DownloadFolder : UserControl
+	public partial class DownloadFolder : MetroUserControl
 	{
 		public DownloadFolder()
 		{

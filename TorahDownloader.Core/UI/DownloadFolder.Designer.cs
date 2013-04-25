@@ -28,40 +28,63 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.btnSelAV = new System.Windows.Forms.Button();
-			this.txtSaveTo = new System.Windows.Forms.TextBox();
-			this.lblText = new System.Windows.Forms.Label();
+			this.btnSelAV = new MetroFramework.Controls.MetroButton();
+			this.txtSaveTo = new MetroFramework.Controls.MetroTextBox();
+			this.lblText = new MetroFramework.Controls.MetroLabel();
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
 			this.SuspendLayout();
 			// 
 			// btnSelAV
 			// 
 			this.btnSelAV.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-			this.btnSelAV.Location = new System.Drawing.Point(321, 19);
+			this.btnSelAV.Highlight = false;
+			this.btnSelAV.Location = new System.Drawing.Point(327, 21);
 			this.btnSelAV.Name = "btnSelAV";
 			this.btnSelAV.Size = new System.Drawing.Size(26, 23);
+			this.btnSelAV.Style = MetroFramework.MetroColorStyle.Blue;
+			this.btnSelAV.StyleManager = null;
 			this.btnSelAV.TabIndex = 2;
 			this.btnSelAV.Text = "...";
-			this.btnSelAV.UseVisualStyleBackColor = true;
+			this.btnSelAV.Theme = MetroFramework.MetroThemeStyle.Light;
 			this.btnSelAV.Click += new System.EventHandler(this.btnSelAV_Click);
 			// 
 			// txtSaveTo
 			// 
-			this.txtSaveTo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.txtSaveTo.Location = new System.Drawing.Point(0, 19);
+			this.txtSaveTo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.txtSaveTo.CustomBackground = false;
+			this.txtSaveTo.CustomForeColor = false;
+			this.txtSaveTo.FontSize = MetroFramework.MetroTextBoxSize.Small;
+			this.txtSaveTo.FontWeight = MetroFramework.MetroTextBoxWeight.Regular;
+			this.txtSaveTo.Location = new System.Drawing.Point(3, 22);
+			this.txtSaveTo.Multiline = false;
 			this.txtSaveTo.Name = "txtSaveTo";
-			this.txtSaveTo.Size = new System.Drawing.Size(319, 20);
+			this.txtSaveTo.SelectedText = "";
+			this.txtSaveTo.Size = new System.Drawing.Size(321, 20);
+			this.txtSaveTo.Style = MetroFramework.MetroColorStyle.Blue;
+			this.txtSaveTo.StyleManager = null;
 			this.txtSaveTo.TabIndex = 1;
+			this.txtSaveTo.Theme = MetroFramework.MetroThemeStyle.Light;
+			this.txtSaveTo.UseStyleColors = false;
 			// 
 			// lblText
 			// 
 			this.lblText.AutoSize = true;
-			this.lblText.Location = new System.Drawing.Point(0, 2);
+			this.lblText.BackColor = System.Drawing.SystemColors.Control;
+			this.lblText.CustomBackground = false;
+			this.lblText.CustomForeColor = false;
+			this.lblText.FontSize = MetroFramework.MetroLabelSize.Medium;
+			this.lblText.FontWeight = MetroFramework.MetroLabelWeight.Light;
+			this.lblText.LabelMode = MetroFramework.Controls.MetroLabelMode.Default;
+			this.lblText.Location = new System.Drawing.Point(3, 0);
 			this.lblText.Name = "lblText";
-			this.lblText.Size = new System.Drawing.Size(122, 13);
+			this.lblText.Size = new System.Drawing.Size(155, 19);
+			this.lblText.Style = MetroFramework.MetroColorStyle.Blue;
+			this.lblText.StyleManager = null;
 			this.lblText.TabIndex = 0;
 			this.lblText.Text = "Default download folder:";
+			this.lblText.Theme = MetroFramework.MetroThemeStyle.Light;
+			this.lblText.UseStyleColors = false;
 			// 
 			// DownloadFolder
 			// 
@@ -71,16 +94,17 @@
 			this.Controls.Add(this.txtSaveTo);
 			this.Controls.Add(this.lblText);
 			this.Name = "DownloadFolder";
-			this.Size = new System.Drawing.Size(347, 50);
+			this.Size = new System.Drawing.Size(356, 50);
 			this.ResumeLayout(false);
 			this.PerformLayout();
+
 		}
 
 		#endregion
 
-		private System.Windows.Forms.Button btnSelAV;
-		private System.Windows.Forms.TextBox txtSaveTo;
-		private System.Windows.Forms.Label lblText;
+		private MetroFramework.Controls.MetroButton btnSelAV;
+		private MetroFramework.Controls.MetroTextBox txtSaveTo;
+		private MetroFramework.Controls.MetroLabel lblText;
 		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
 	}
 }
