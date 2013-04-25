@@ -13,6 +13,7 @@ namespace TorahDownloader.Core
 		private Type protocolProviderType;
 		private IProtocolProvider provider;
 
+		private string requestedFileName;
 		#endregion
 
 		#region Constructor
@@ -66,6 +67,23 @@ namespace TorahDownloader.Core
 			{
 				url = value;
 				BindProtocolProviderType();
+			}
+		}
+
+		public string FileName
+		{
+			get
+			{
+				if (requestedFileName == null)
+				{
+					Uri u = new Uri(this.URL);
+					return u.Segments[u.Segments.Length - 1];
+				}
+				return requestedFileName;
+			}
+			set
+			{
+				requestedFileName = value;
 			}
 		}
 

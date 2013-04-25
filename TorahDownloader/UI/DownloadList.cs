@@ -191,9 +191,7 @@ namespace TorahDownloader.UI
 
 				foreach (ResourceLocation rl in args)
 				{
-					Uri uri = new Uri(rl.URL);
-
-					string fileName = uri.Segments[uri.Segments.Length - 1];
+					string fileName = rl.FileName;
 					fileName = HttpUtility.UrlDecode(fileName).Replace("/", "\\");
 
 					DownloadManager.Instance.Add(rl, null, path + fileName, segments, false);
