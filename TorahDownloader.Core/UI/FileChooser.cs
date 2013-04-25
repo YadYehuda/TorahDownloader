@@ -52,5 +52,27 @@ namespace TorahDownloader.Core.UI
 			get { return openFileDialog1.Filter; }
 			set { openFileDialog1.Filter = value; }
 		}
+
+		public MetroFramework.MetroColorStyle Color
+		{
+			get { return txtOpenFrom.Style; }
+			set
+			{
+				txtOpenFrom.Style = value;
+				txtOpenFrom.UseStyleColors = true;
+				btnSelAV.Style = value;
+				btnSelAV.Highlight = true;
+
+				this.Refresh();
+			}
+		}
+
+		public void ClearColor()
+		{
+			txtOpenFrom.UseStyleColors = false;
+			btnSelAV.Highlight = false;
+
+			this.Refresh();
+		}
 	}
 }

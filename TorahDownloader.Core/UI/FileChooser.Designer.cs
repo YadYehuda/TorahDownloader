@@ -86,10 +86,6 @@
 			this.lblText.Theme = MetroFramework.MetroThemeStyle.Light;
 			this.lblText.UseStyleColors = false;
 			// 
-			// openFileDialog1
-			// 
-			this.openFileDialog1.FileName = "openFileDialog1";
-			// 
 			// FileChooser
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);

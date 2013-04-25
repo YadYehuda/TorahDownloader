@@ -41,5 +41,22 @@ namespace TorahDownloader.Core.UI
 				txtSaveTo.Text = folderBrowserDialog1.SelectedPath;
 			}
 		}
+
+		public MetroFramework.MetroColorStyle Color
+		{
+			get { return txtSaveTo.Style; }
+			set
+			{
+				txtSaveTo.Style = value;
+				txtSaveTo.UseStyleColors = true;
+				txtSaveTo.Refresh();
+			}
+		}
+
+		public void ClearColor()
+		{
+			txtSaveTo.UseStyleColors = false;
+			txtSaveTo.Refresh();
+		}
 	}
 }
